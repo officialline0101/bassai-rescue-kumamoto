@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>工事予約フォーム</title>
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  <style>
+    /* ===== 設定: カラー＆変数（造園・工事向けのアースカラー） ===== */
+    :root {
+      --main-green: #2d6a4f;    /* メインカラー（濃い緑） */
+      --accent-color: #d08c60;  /* アクセント（土・木の色） */
+      --light-base: #e9edc9;    /* 背景ベース（薄い黄緑） */
+      --text-main: #333333;     /* テキスト色 */
+      --bg-color: #f1f3f5;      /* 全体背景 */
+      --card-bg: #ffffff;       /* カード背景 */
+      --input-bg: #f8f9fa;      /* 入力欄背景 */
+      --border-radius: 8px;     /* 角丸（少しカッチリさせる） */
+    }
+
+    /* ===== ベーススタイル ===== */
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+      box-sizing: border-box;
+    }
+
+    /* メインコンテナ */
+    .container {
+      width: 100%;
+      max-width: 600px;
+      background: var(--card-bg);
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+      overflow: hidden;
+      padding-bottom: 40px;
+    }
+
+    /* ===== ヘッダー ===== */
+    .header {
+      background: var(--main-green);
+      padding: 24px 20px;
+      text-align: center;
+      margin-bottom: 25px;
+    }
+    h1 {
+      margin: 0;
+      font-size: 20px;
+      color: #ffffff;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+    }
+    .sub-title {
+      display: block;
+      font-size: 12px;
+      font-weight: normal;
+      margin-top: 8px;
+      color: #e9edc9;
+      opacity: 0.9;
+    }
+
+    .content-area {
+      padding: 0 25px;
+    }
+
+    /* ヘルプボックス */
+    .help {
+      background: #fdfdfd;
+      border: 1px solid #ddd;
+      border-left: 5px solid var(--accent-color);
+      padding: 12px 16px;
+      border-radius: 4px;
+      font-size: 13px;
+      line-height: 1.6;
+      margin-bottom: 30px;
+      color: #555;
+    }
+
+    /* ===== フォーム要素 ===== */
+    .label-wrapper {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-top: 24px;
+      margin-bottom: 8px;
+    }
+    
+    .label {
+      font-weight: 700;
+      font-size: 15px;
+      color: var(--text-main);
+      border-left: 4px solid var(--main-green);
+      padding-left: 10px;
+    }
+
+    /* バッジ */
+    .badge-required {
+      margin-left: auto;
+      padding: 3px 8px;
+      font-size: 11px;
+      color: #fff;
+      background: #c92a2a; /* 必須は赤系で見やすく */
+      border-radius: 4px;
+      font-weight: normal;
+    }
+    .badge-optional {
+      margin-left: auto;
+      padding: 3px 8px;
+      font-size: 11px;
+      color: #555;
+      background: #eee;
+      border-radius: 4px;
+      font-weight: normal;
+    }
+
+    /* 入力フィールド */
+    input[type="text"], input[type="tel"], textarea {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 12px;
+      border: 1px solid #ced4da;
+      border-radius: var(--border-radius);
+      font-size: 16px;
+      background: var(--input-bg);
+      color: var(--text-main);
+      transition: 0.2s;
+      appearance: none;
+    }
+    input:focus, textarea:focus {
+      outline: none;
+      border-color: var(--main-green);
+      background: #fff;
+      box-shadow: 0 0 0 3px rgba(45, 106, 79, 0.15);
+    }
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+      line-height: 1.6;
+    }
+    ::placeholder { color: #adb5bd; font-size: 14px; }
+
+    /* ===== ボタンレイアウト ===== */
+    .btn-group {
+      display: grid;
+      gap: 10px;
+      width: 100%;
+      grid-template-columns: 1fr 1fr; /* 基本2列 */
+    }
+    /* 「庭工事・その他」などが長くなる場合やスマホで見やすくするため調整 */
+    @media (max-width: 400px) {
+        .btn-group { grid-template-columns: 1fr; }
+    }
+
+    .btn {
+      width: 100%;
+      padding: 14px 5px;
+      border: 1px solid #ced4da;
+      border-radius: var(--border-radius);
+      background: #fff;
+      color: #555;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      min-height: 50px;
+    }
+    .btn:hover {
+      background-color: #f8f9fa;
+    }
+    .btn.active {
+      background: var(--main-green);
+      border-color: var(--main-green);
+      color: #fff;
+      box-shadow: 0 2px 6px rgba(45, 106, 79, 0.4);
+    }
+
+    /* ===== 送信ボタン ===== */
+    .submit-button {
+      display: block;
+      width: 100%;
+      margin-top: 40px;
+      padding: 16px;
+      border: none;
+      border-radius: var(--border-radius);
+      background: var(--accent-color);
+      color: #fff;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(208, 140, 96, 0.3);
+      transition: transform 0.1s, background 0.2s;
+    }
+    .submit-button:hover {
+      background: #b57b54;
+    }
+    .submit-button:active {
+      transform: scale(0.98);
+    }
+
+    /* ===== スマホ専用調整 ===== */
+    @media (max-width: 480px) {
+      body {
+        padding: 10px;
+        background-color: #e9ecef;
+      }
+      .container {
+        padding-bottom: 30px;
+      }
+      .header {
+        padding: 20px 15px;
+      }
+      h1 { font-size: 18px; }
+      .content-area {
+        padding: 0 16px;
+      }
+      .help {
+        font-size: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="header">
+      <h1>工事予約フォーム<span class="sub-title">Reservation Form</span></h1>
+    </div>
+    
+    <div class="content-area">
+      <div class="help">
+        以下の項目を入力し、<br>最後に「送信する」ボタンを押してください。
+      </div>
+
+      <div class="label-wrapper">
+        <label class="label" for="fullName">お名前</label>
+        <span class="badge-required">必須</span>
+      </div>
+      <input type="text" id="fullName" placeholder="例）建築 太郎" oninput="saveInput('fullName')"/>
+
+      <div class="label-wrapper">
+        <label class="label" for="phone">お電話番号</label>
+        <span class="badge-required">必須</span>
+      </div>
+      <input type="tel" id="phone" inputmode="tel" placeholder="例）09012345678" oninput="saveInput('phone')"/>
+
+      <div class="label-wrapper">
+        <label class="label" for="address">ご住所</label>
+        <span class="badge-required">必須</span>
+      </div>
+      <input type="text" id="address" placeholder="例）〇〇県〇〇市〇〇町1-2-3" oninput="saveInput('address')"/>
+
+      <div class="label-wrapper">
+        <div class="label">希望工事内容</div>
+        <span class="badge-required">必須</span>
+      </div>
+      <div class="btn-group" id="constructionTypeGroup">
+        <button type="button" class="btn" data-value="伐採工事">伐採工事</button>
+        <button type="button" class="btn" data-value="剪定工事">剪定工事</button>
+        <button type="button" class="btn" data-value="除草工事">除草工事</button>
+        <button type="button" class="btn" data-value="外溝工事">外溝工事</button>
+        <button type="button" class="btn" data-value="庭工事・その他">庭工事・その他</button>
+      </div>
+
+      <div class="label-wrapper">
+        <label class="label" for="remarks">備考</label>
+        <span class="badge-optional">任意</span>
+      </div>
+      <textarea id="remarks" placeholder="ご相談内容の詳細や、連絡のつきやすい時間帯などがあればご記入ください。"></textarea>
+
+      <button id="submitArea" class="submit-button" onclick="submitForm()">送信する</button>
+    </div>
+  </div>
+
+  <script src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"></script>
+  <script>
+    // ---- 状態管理 ----
+    const state = {
+      constructionType: ""
+    };
+
+    // ---- 入力内容の一時保存 ----
+    function saveInput(key) {
+      const val = document.getElementById(key).value;
+      localStorage.setItem(key, val);
+    }
+
+    // ---- 初期化処理 ----
+    document.addEventListener("DOMContentLoaded", () => {
+      
+      // 前回の入力内容を復元
+      const savedFullName = localStorage.getItem('fullName');
+      const savedPhone = localStorage.getItem('phone');
+      const savedAddress = localStorage.getItem('address');
+
+      if (savedFullName) document.getElementById('fullName').value = savedFullName;
+      if (savedPhone)    document.getElementById('phone').value = savedPhone;
+      if (savedAddress)  document.getElementById('address').value = savedAddress;
+
+      // ★ここにあなたのLIFF IDを設定してください
+      liff.init({ liffId: "YOUR_LIFF_ID_HERE" })
+        .then(() => console.log("LIFF初期化成功"))
+        .catch(err => console.error("LIFF初期化失敗", err));
+
+      // 工事内容の選択（単一選択）
+      setupSingleSelect("constructionTypeGroup", val => state.constructionType = val);
+    });
+
+    // ---- ボタン選択ロジック ----
+    function setupSingleSelect(groupId, onChange) {
+      const group = document.getElementById(groupId);
+      group.addEventListener("click", e => {
+        const btn = e.target.closest("button.btn");
+        if (!btn) return;
+        group.querySelectorAll(".btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        onChange(btn.dataset.value);
+      });
+    }
+
+    // ---- 送信処理 ----
+    function submitForm() {
+      // 値の取得
+      const fullName = document.getElementById("fullName").value.trim();
+      const phone    = document.getElementById("phone").value.trim();
+      const address  = document.getElementById("address").value.trim();
+      const remarks  = document.getElementById("remarks").value.trim();
+      const type     = state.constructionType;
+
+      // バリデーション
+      if (!fullName) { alert("お名前を入力してください。"); return; }
+      if (!phone)    { alert("お電話番号を入力してください。"); return; }
+      if (!address)  { alert("ご住所を入力してください。"); return; }
+      if (!type)     { alert("希望工事内容を選択してください。"); return; }
+
+      // 送信テキストの作成
+      const text = 
+        `🔴予約フォーム作成\n` +
+        `①お名前：${fullName}\n` +
+        `②お電話番号：${phone}\n` +
+        `③ご住所：${address}\n` +
+        `④希望工事内容：${type}\n` +
+        `⑤備考：${remarks || "（なし）"}`;
+
+      // LINEトークへ送信
+      if (!liff.isInClient()) {
+        alert("LINEアプリ内から開いてください。\n\n" + text); // ブラウザで開いた場合のデバッグ用
+        return;
+      }
+
+      liff.sendMessages([{ type: "text", text: text }])
+        .then(() => {
+          alert("送信が完了しました。");
+          liff.closeWindow();
+        })
+        .catch(err => {
+          console.error("送信エラー", err);
+          alert("送信に失敗しました。");
+        });
+    }
+  </script>
+</body>
+</html>
